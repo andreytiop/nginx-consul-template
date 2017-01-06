@@ -8,7 +8,7 @@ RUN wget https://releases.hashicorp.com/consul-template/0.18.0-rc1/consul-templa
 
 #Setup Consul Template Files
 RUN mkdir /etc/consul-templates
-COPY ./nginx.ctpl /etc/consul-templates/app.conf
+COPY ./nginx.ctmpl /etc/consul-templates/app.conf
 
 # Remove all other conf files from nginx
 RUN rm /etc/nginx/conf.d/*
