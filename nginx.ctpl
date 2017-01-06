@@ -1,0 +1,25 @@
+#create services upstreams
+##################################################################
+{{- range $service := services }} {{- if ne .Name "consul" }}
+upstream {{ $service.Name }} {
+         ip_hash;
+	{{- range $tag, $services := service .Name | byTag }}{{- if $tag | regexMatch "^port"}}
+	{{$tagValue := index ($tag | split ":") 1}}
+	{{- range $services }} server {{ .Address }}:{{$tagValue}};
+	{{- end}}
+	{{- end}}{{- end}}
+}
+{{end}}{{end}}
+server {
+  listen 80 default_server;
+     proxy_set_header            Host $host;
+     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+{{- range $service := services }} {{- if ne .Name "consul" }}
+{{- range $tag, $services := service .Name | byTag }}{{- if $tag | contains "contextpath"}}
+{{$tagContextpath := index ($tag | split ":") 1}}
+location /{{$tagContextpath}}/{
+     proxy_pass         http://{{$service.Name}};
+     proxy_redirect     off;
+}
+{{- end}}{{- end}}{{- end}}{{end}}
+}

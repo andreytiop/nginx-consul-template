@@ -1,0 +1,7 @@
+nginx:
+    container_name: nginx
+    build: .
+    ports:
+        - "80:80"
+    net: my-net
+    restart: always
