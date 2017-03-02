@@ -16,4 +16,4 @@ RUN rm /etc/nginx/conf.d/*
 #Default Variables
 ENV CONSUL 172.17.0.1:8500
 
-CMD /usr/sbin/nginx -c /etc/nginx/nginx.conf && /usr/local/bin/consul-template -consul=$CONSUL -template "/etc/consul-templates/app.conf:/etc/nginx/conf.d/app.conf:nginx -t && nginx -s reload || true"
+CMD /usr/sbin/nginx -c /etc/nginx/nginx.conf && /usr/local/bin/consul-template -consul=$CONSUL -template "/etc/consul-templates/app.conf:/etc/nginx/conf.d/app.conf:nginx -t && nginx -s reload || true" || true
